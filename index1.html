@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLASSIFIED: THE STRANGE, DARK & MYSTERIOUS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=Creepster&family=IM+Fell+English:ital@0;1&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-left: 2px solid #8b0000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #8b0000, #450000);
+            border-radius: 10px;
+            border: 2px solid #000;
+        }
+
+        body {
+            font-family: 'Courier Prime', monospace;
+            background: #0a0a0a;
+            color: #d4d4d4;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor - Flashlight */
+        .flashlight-cursor {
+            position: fixed;
+            width: 40px;
+            height: 80px;
+            pointer-events: none;
+            z-index: 100000;
+            transition: transform 0.1s ease;
+        }
+
+        .flashlight-body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #2c2c2c 0%, #1a1a1a 50%, #0a0a0a 100%);
+            clip-path: polygon(30% 0%, 70% 0%, 65% 60%, 75% 100%, 25% 100%, 35% 60%);
+            position: relative;
+            border: 1px solid #444;
+        }
+
+        .flashlight-beam {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at center, 
+                rgba(255, 200, 100, 0.15) 0%, 
+                rgba(255, 200, 100, 0.05) 40%, 
+                transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            mix-blend-mode: screen;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Darkness Overlay */
+        .darkness {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                transparent 0%, 
+                rgba(0, 0, 0, 0.7) 30%,
+                rgba(0, 0, 0, 0.95) 100%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* Film Grain */
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><filter id="noise"><feTurbulence baseFrequency="0.9" numOctaves="4"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.15"/></svg>');
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0.4;
+            animation: grainAnim 0.3s infinite;
+        }
+
+        @keyframes grainAnim {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            20% { transform: translate(-10%, 5%); }
+            30% { transform: translate(5%, -10%); }
+            40% { transform: translate(-5%, 15%); }
+            50% { transform: translate(-10%, 5%); }
+            60% { transform: translate(15%, 0); }
+            70% { transform: translate(0, 10%); }
+            80% { transform: translate(-15%, 0); }
+            90% { transform: translate(10%, 5%); }
+        }
+
+        /* Warning Screen */
+        .warning-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 200000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 1s ease;
+        }
+
+        .warning-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .warning-box {
+            background: #1a0000;
+            border: 3px solid #8b0000;
+            padding: 60px;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 
+                0 0 50px rgba(139, 0, 0, 0.5),
+                inset 0 0 30px rgba(139, 0, 0, 0.2);
+        }
+
+        .warning-title {
+            font-family: 'Special Elite', monospace;
+            font-size: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+            margin-bottom: 30px;
+            letter-spacing: 5px;
+        }
+
+        .warning-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #d4d4d4;
+            margin-bottom: 40px;
+        }
+
+        .enter-button {
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            font-family: 'Special Elite', monospace;
+            background: linear-gradient(135deg, #8b0000, #450000);
+            color: #fff;
+            border: 2px solid #ff0000;
+            cursor: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .enter-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 0, 0, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .enter-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.8);
+        }
+
+        .enter-button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        /* Evidence Board Background */
+        .evidence-board {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 49.5%, rgba(139, 0, 0, 0.1) 49.5%, rgba(139, 0, 0, 0.1) 50.5%, transparent 50.5%),
+                linear-gradient(0deg, transparent 49.5%, rgba(139, 0, 0, 0.1) 49.5%, rgba(139, 0, 0, 0.1) 50.5%, transparent 50.5%),
+                #0f0f0f;
+            background-size: 100px 100px;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 100px 50px;
+            z-index: 10;
+        }
+
+        .classified-stamp {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 200px;
+            height: 200px;
+            border: 8px solid rgba(255, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(-15deg);
+            animation: stampPulse 2s ease-in-out infinite;
+        }
+
+        .classified-stamp span {
+            font-family: 'Special Elite', monospace;
+            font-size: 2.5rem;
+            color: rgba(255, 0, 0, 0.8);
+            font-weight: 700;
+            letter-spacing: 5px;
+        }
+
+        @keyframes stampPulse {
+            0%, 100% { transform: rotate(-15deg) scale(1); }
+            50% { transform: rotate(-15deg) scale(1.05); }
+        }
+
+        .main-title {
+            font-family: 'Special Elite', monospace;
+            font-size: 5rem;
+            color: #8b0000;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 
+                2px 2px 0 #000,
+                0 0 30px rgba(139, 0, 0, 0.8);
+            letter-spacing: 8px;
+            animation: glitchTitle 5s infinite;
+        }
+
+        @keyframes glitchTitle {
+            0%, 90%, 100% { transform: translate(0); }
+            91% { transform: translate(-3px, 2px); }
+            92% { transform: translate(3px, -2px); }
+            93% { transform: translate(-3px, 2px); }
+        }
+
+        .subtitle {
+            font-family: 'IM Fell English', serif;
+            font-size: 2rem;
+            color: #d4d4d4;
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .case-file-label {
+            font-family: 'Special Elite', monospace;
+            font-size: 1.2rem;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+        }
+
+        /* Case File Folder */
+        .case-folder {
+            width: 90%;
+            max-width: 1200px;
+            margin: 100px auto;
+            position: relative;
+            perspective: 1000px;
+            z-index: 100;
+        }
+
+        .folder-tab {
+            width: 300px;
+            height: 50px;
+            background: linear-gradient(135deg, #8b6914 0%, #6b5610 100%);
+            border: 2px solid #5a4a0f;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            margin-left: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .folder-tab span {
+            font-family: 'Special Elite', monospace;
+            font-size: 1.2rem;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .folder-content {
+            background: linear-gradient(135deg, #d4a574 0%, #b8945f 100%);
+            border: 3px solid #8b6914;
+            padding: 60px;
+            position: relative;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                inset 0 0 50px rgba(0, 0, 0, 0.2);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .case-folder:hover .folder-content {
+            transform: rotateX(2deg) rotateY(-2deg);
+        }
+
+        /* Paper Texture */
+        .folder-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><filter id="paper"><feTurbulence baseFrequency="0.04" numOctaves="5" seed="2"/></filter><rect width="100%" height="100%" filter="url(%23paper)" opacity="0.15"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .case-number {
+            font-family: 'Special Elite', monospace;
+            font-size: 1.5rem;
+            color: #000;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .case-title {
+            font-family: 'Special Elite', monospace;
+            font-size: 3rem;
+            color: #8b0000;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 2px 8px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .redacted::selection {
+            background: #000;
+        }
+
+        .case-description {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: #1a1a1a;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Polaroid Photos */
+        .evidence-photo {
+            width: 300px;
+            height: 350px;
+            background: #fff;
+            padding: 15px;
+            padding-bottom: 60px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin: 30px;
+            display: inline-block;
+            transform: rotate(var(--rotation, 0deg));
+            transition: all 0.3s ease;
+            cursor: none;
+        }
+
+        .evidence-photo:hover {
+            transform: rotate(0deg) scale(1.1) translateY(-10px);
+            z-index: 1000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .photo-image {
+            width: 100%;
+            height: 270px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Special Elite', monospace;
+            color: #666;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: 'Special Elite', monospace;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        /* Tape Effect */
+        .tape {
+            position: absolute;
+            width: 100px;
+            height: 30px;
+            background: rgba(255, 255, 200, 0.4);
+            border: 1px solid rgba(200, 200, 150, 0.3);
+            transform: rotate(-45deg);
+            top: -15px;
+            right: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Evidence Tags */
+        .evidence-tag {
+            background: #fff;
+            border: 2px solid #8b0000;
+            padding: 20px 30px;
+            margin: 20px 0;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .evidence-tag::before {
+            content: 'EVIDENCE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #8b0000;
+            color: #fff;
+            padding: 5px 15px;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        .tag-content {
+            font-family: 'Courier Prime', monospace;
+            color: #000;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 50px 0;
+            margin: 100px auto;
+            max-width: 1000px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                #8b0000 10%, 
+                #8b0000 90%, 
+                transparent 100%);
+            transform: translateX(-50%);
+        }
+
+        .timeline-event {
+            position: relative;
+            margin: 80px 0;
+            width: 45%;
+        }
+
+        .timeline-event.left {
+            left: 0;
+            text-align: right;
+            padding-right: 50px;
+        }
+
+        .timeline-event.right {
+            left: 55%;
+            text-align: left;
+            padding-left: 50px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #8b0000;
+            border: 4px solid #0a0a0a;
+            border-radius: 50%;
+            top: 0;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.8);
+        }
+
+        .timeline-event.left .timeline-dot {
+            right: -10px;
+        }
+
+        .timeline-event.right .timeline-dot {
+            left: -10px;
+        }
+
+        .timeline-content {
+            background: rgba(26, 0, 0, 0.8);
+            border: 2px solid #8b0000;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-date {
+            font-family: 'Special Elite', monospace;
+            font-size: 1.2rem;
+            color: #ff0000;
+            margin-bottom: 15px;
+        }
+
+        .timeline-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #d4d4d4;
+        }
+
+        /* Audio Player */
+        .audio-evidence {
+            background: #1a1a1a;
+            border: 3px solid #8b0000;
+            padding: 40px;
+            margin: 50px 0;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .audio-title {
+            font-family: 'Special Elite', monospace;
+            font-size: 1.5rem;
+            color: #ff0000;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #8b0000, #450000);
+            border: 2px solid #ff0000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.8);
+        }
+
+        .play-button::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 15px solid #fff;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 5px;
+        }
+
+        .waveform {
+            flex: 1;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .wave-bar {
+            flex: 1;
+            background: #8b0000;
+            border-radius: 2px;
+            animation: waveAnimation 1s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes waveAnimation {
+            0%, 100% { height: 10px; opacity: 0.3; }
+            50% { height: 40px; opacity: 1; }
+        }
+
+        /* Newspaper Clipping */
+        .newspaper {
+            background: #f4e8d0;
+            border: 3px solid #8b7355;
+            padding: 40px;
+            margin: 80px auto;
+            max-width: 800px;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                inset 0 0 50px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transform: rotate(-1deg);
+            transition: all 0.3s ease;
+        }
+
+        .newspaper:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .newspaper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><filter id="oldpaper"><feTurbulence baseFrequency="0.05" numOctaves="3"/></filter><rect width="100%" height="100%" filter="url(%23oldpaper)" opacity="0.1"/></svg>');
+            pointer-events: none;
+        }
+
+        .newspaper-header {
+            text-align: center;
+            border-bottom: 3px solid #000;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .newspaper-title {
+            font-family: 'IM Fell English', serif;
+            font-size: 3rem;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .newspaper-date {
+            font-family: 'Special Elite', monospace;
+            font-size: 1rem;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .newspaper-headline {
+            font-family: 'IM Fell English', serif;
+            font-size: 2.5rem;
+            color: #000;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .newspaper-article {
+            font-family: 'IM Fell English', serif;
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            line-height: 1.8;
+            columns: 2;
+            column-gap: 40px;
+        }
+
+        /* Map with Pins */
+        .evidence-map {
+            width: 100%;
+            max-width: 1000px;
+            height: 600px;
+            margin: 80px auto;
+            background: #2a2a2a;
+            border: 5px solid #8b0000;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+
+        .map-pin {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background: #ff0000;
+            clip-path: polygon(50% 100%, 0% 40%, 0% 20%, 20% 0%, 50% 0%, 80% 0%, 100% 20%, 100% 40%);
+            cursor: none;
+            transition: all 0.3s ease;
+            animation: pinDrop 0.5s ease-out;
+        }
+
+        @keyframes pinDrop {
+            0% {
+                transform: translateY(-100px) scale(0);
+            }
+            60% {
+                transform: translateY(10px) scale(1.1);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .map-pin:hover {
+            transform: scale(1.3);
+            filter: drop-shadow(0 0 20px #ff0000);
+        }
+
+        .pin-label {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            white-space: nowrap;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .map-pin:hover .pin-label {
+            opacity: 1;
+        }
+
+        /* String/Connection Lines */
+        .connection-board {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 800px;
+            margin: 100px auto;
+            background: rgba(15, 15, 15, 0.8);
+            border: 5px solid #8b0000;
+            padding: 50px;
+            overflow: hidden;
+        }
+
+        .connection-node {
+            position: absolute;
+            width: 150px;
+            padding: 20px;
+            background: rgba(212, 165, 116, 0.9);
+            border: 3px solid #8b6914;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            font-family: 'Special Elite', monospace;
+            font-size: 0.9rem;
+            color: #000;
+            text-align: center;
+            cursor: none;
+            transition: all 0.3s ease;
+        }
+
+        .connection-node:hover {
+            transform: scale(1.1);
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(139, 0, 0, 0.8);
+        }
+
+        .red-string {
+            position: absolute;
+            height: 2px;
+            background: #ff0000;
+            transform-origin: left center;
+            box-shadow: 0 0 5px #ff0000;
+            z-index: 1;
+        }
+
+        /* Interactive Reveal Sections */
+        .reveal-section {
+            margin: 100px auto;
+            max-width: 1000px;
+            perspective: 1000px;
+        }
+
+        .sealed-envelope {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            cursor: none;
+            transition: all 0.5s ease;
+        }
+
+        .envelope-back {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #8b7355 0%, #6b5845 100%);
+            border: 3px solid #5a4835;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #a08565 0%, #8b7355 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            border: 3px solid #5a4835;
+            transform-origin: top center;
+            transition: transform 0.8s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .sealed-envelope:hover .envelope-flap {
+            transform: rotateX(-180deg);
+        }
+
+        .envelope-content {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 90%;
+            height: 80%;
+            background: #f4e8d0;
+            padding: 40px;
+            font-family: 'IM Fell English', serif;
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.3s;
+            overflow-y: auto;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .sealed-envelope:hover .envelope-content {
+            opacity: 1;
+        }
+
+        /* Typewriter Effect */
+        .typewriter {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1.3rem;
+            color: #d4d4d4;
+            line-height: 2;
+            position: relative;
+        }
+
+        .typewriter::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Conclusion Section */
+        .conclusion {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 50px;
+            text-align: center;
+            position: relative;
+        }
+
+        .final-statement {
+            max-width: 800px;
+            background: rgba(26, 0, 0, 0.9);
+            border: 3px solid #8b0000;
+            padding: 60px;
+            border-radius: 10px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                inset 0 0 30px rgba(139, 0, 0, 0.2);
+        }
+
+        .final-statement h2 {
+            font-family: 'Special Elite', monospace;
+            font-size: 3rem;
+            color: #ff0000;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+
+        .final-statement p {
+            font-size: 1.4rem;
+            line-height: 2;
+            color: #d4d4d4;
+            margin-bottom: 20px;
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            animation: glitch 5s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { 
+                transform: translate(0);
+                filter: hue-rotate(0deg);
+            }
+            91% { 
+                transform: translate(-2px, 2px);
+                filter: hue-rotate(90deg);
+            }
+            92% { 
+                transform: translate(2px, -2px);
+                filter: hue-rotate(180deg);
+            }
+            93% { 
+                transform: translate(-2px, 2px);
+                filter: hue-rotate(270deg);
+            }
+        }
+
+        /* Static TV Effect */
+        .tv-static {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><filter id="static"><feTurbulence baseFrequency="0.9" numOctaves="4"/></filter><rect width="100%" height="100%" filter="url(%23static)"/></svg>');
+            opacity: 0;
+            pointer-events: none;
+            z-index: 99999;
+            transition: opacity 0.1s;
+        }
+
+        .tv-static.active {
+            opacity: 0.1;
+            animation: staticFlash 0.1s infinite;
+        }
+
+        @keyframes staticFlash {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.15; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 3rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .folder-content {
+                padding: 30px;
+            }
+            
+            .case-title {
+                font-size: 2rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-event {
+                width: 100%;
+                left: 0 !important;
+                text-align: left !important;
+                padding-left: 80px !important;
+                padding-right: 0 !important;
+            }
+            
+            .timeline-event .timeline-dot {
+                left: 20px !important;
+                right: auto !important;
+            }
+            
+            .newspaper-article {
+                columns: 1;
+            }
+        }
+
+        /* Scanline Effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9996;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Warning Screen -->
+    <div class="warning-screen" id="warningScreen">
+        <div class="warning-box">
+            <div class="warning-title">⚠ WARNING ⚠</div>
+            <div class="warning-text">
+                The following case files contain disturbing content related to mysterious events,
+                unexplained phenomena, and unsettling occurrences. These stories are presented
+                for investigative purposes only.<br><br>
+                Viewer discretion is advised.<br><br>
+                <strong>DO YOU WISH TO PROCEED?</strong>
+            </div>
+            <button class="enter-button" id="enterButton">OPEN CASE FILES</button>
+        </div>
+    </div>
+
+    <!-- Flashlight Cursor -->
+    <div class="flashlight-cursor" id="flashlightCursor">
+        <div class="flashlight-body"></div>
+    </div>
+    <div class="flashlight-beam" id="flashlightBeam"></div>
+
+    <!-- Effects -->
+    <div class="darkness" id="darkness"></div>
+    <div class="film-grain"></div>
+    <div class="scanlines"></div>
+    <div class="evidence-board"></div>
+    <div class="tv-static" id="tvStatic"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="classified-stamp">
+            <span>TOP SECRET</span>
+        </div>
+        
+        <div class="case-file-label">Department of Unexplained Phenomena</div>
+        <h1 class="main-title">THE ARCHIVES</h1>
+        <p class="subtitle">Five Cases That Should Have Stayed Buried</p>
+    </section>
+
+    <!-- CASE #1 -->
+    <div class="case-folder" id="case1">
+        <div class="folder-tab">
+            <span>CASE FILE #001</span>
+        </div>
+        <div class="folder-content">
+            <div class="case-number">File No. 1987-NM-447</div>
+            <h2 class="case-title">THE CABIN IN THE WOODS</h2>
+            
+            <div class="case-description">
+                In the winter of 1987, a group of hikers discovered an abandoned cabin deep in the 
+                New Mexico wilderness. What they found inside defied explanation. The cabin appeared 
+                untouched for decades, yet fresh food sat on the table. Seven watches hung on the wall, 
+                all stopped at exactly <span class="redacted">3:33 AM</span>. Most disturbing was the journal...
+            </div>
+
+            <div class="evidence-tag">
+                <div class="tag-content">
+                    "They found us. The ones who walk between the trees. We can hear them breathing 
+                    through the walls. Sarah says we should leave, but the doors won't open anymore. 
+                    The watches have all stopped. Time doesn't work the same way here. 
+                    If you're reading this, <strong>DO NOT STAY AFTER DARK.</strong>"
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 50px 0;">
+                <div class="evidence-photo" style="--rotation: -3deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center;">
+                            📷<br>
+                            [EVIDENCE PHOTO]<br>
+                            Cabin - Exterior<br>
+                            <span style="font-size: 0.8rem; color: #888;">Last known location</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 1A - Discovery Site</div>
+                </div>
+
+                <div class="evidence-photo" style="--rotation: 2deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center;">
+                            📷<br>
+                            [EVIDENCE PHOTO]<br>
+                            Seven Watches<br>
+                            <span style="font-size: 0.8rem; color: #888;">All stopped: 3:33 AM</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 1B - Unexplained Anomaly</div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-event left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">December 15, 1987</div>
+                        <div class="timeline-description">
+                            Hiking group reports cabin discovery to local authorities. Initial investigation 
+                            finds no ownership records dating back to 1920s.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-event right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">December 18, 1987</div>
+                        <div class="timeline-description">
+                            Forensics team arrives. Carbon dating of food samples shows impossible results: 
+                            bread is 3 days old, but newspaper found nearby dated 1952.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-event left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">December 22, 1987</div>
+                        <div class="timeline-description">
+                            Investigation team reports strange occurrences: equipment malfunctions, 
+                            time discrepancies between watches, voices heard in surrounding forest.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-event right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">December 23, 1987</div>
+                        <div class="timeline-description">
+                            Site sealed by federal agents. All evidence confiscated. 
+                            Case officially closed. Local witnesses instructed not to discuss findings.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="newspaper">
+                <div class="newspaper-header">
+                    <div class="newspaper-title">The Daily Chronicle</div>
+                    <div class="newspaper-date">December 25, 1987</div>
+                </div>
+                <div class="newspaper-headline">
+                    MYSTERIOUS CABIN INVESTIGATION CONCLUDED
+                </div>
+                <div class="newspaper-article">
+                    Local authorities announced today that the investigation into the abandoned cabin 
+                    discovered in the northern wilderness has been concluded. Officials state that the 
+                    structure was simply an old hunting cabin that had been forgotten over time. 
+                    "There's nothing unusual about this case," stated Sheriff Reynolds. "Just an old 
+                    building that nature was reclaiming." However, residents remain skeptical, with 
+                    several witnesses claiming they saw federal vehicles and heard strange sounds emanating 
+                    from the forest for three consecutive nights. The cabin has since been demolished, 
+                    and the area declared off-limits to hikers. When pressed for details about the 
+                    demolition, authorities declined to comment, citing "standard procedure."
+                </div>
+            </div>
+
+            <div class="case-description" style="margin-top: 50px; font-style: italic; color: #4a4a4a;">
+                <strong>Official Conclusion:</strong> Case closed due to lack of evidence.<br>
+                <strong>Unofficial Note:</strong> The cabin's location has been removed from all maps. 
+                Three members of the original hiking group have since disappeared under unexplained circumstances.
+                No bodies were ever found.
+            </div>
+        </div>
+    </div>
+
+    <!-- CASE #2 -->
+    <div class="case-folder" id="case2">
+        <div class="folder-tab">
+            <span>CASE FILE #002</span>
+        </div>
+        <div class="folder-content">
+            <div class="case-number">File No. 1993-FL-889</div>
+            <h2 class="case-title">THE BROADCAST THAT NEVER ENDED</h2>
+            
+            <div class="case-description">
+                On March 3rd, 1993, radio station WKNX in Florida began broadcasting a signal that, 
+                according to experts, should be impossible. The transmission continues to this day, 
+                despite the station being demolished in 1995. Listeners report hearing 
+                <span class="redacted">voices calling their names</span> within the static.
+            </div>
+
+            <div class="audio-evidence">
+                <div class="audio-title">⚠ Audio Evidence - Transmission Sample</div>
+                <div class="case-description" style="color: #999; margin-bottom: 20px;">
+                    Recorded: March 15, 1993 - 2:47 AM<br>
+                    WARNING: Do not listen with headphones. Do not listen alone.
+                </div>
+                <div class="audio-controls">
+                    <div class="play-button" id="playButton1"></div>
+                    <div class="waveform">
+                        <div class="wave-bar" style="height: 15px; animation-delay: 0s;"></div>
+                        <div class="wave-bar" style="height: 30px; animation-delay: 0.1s;"></div>
+                        <div class="wave-bar" style="height: 45px; animation-delay: 0.2s;"></div>
+                        <div class="wave-bar" style="height: 25px; animation-delay: 0.3s;"></div>
+                        <div class="wave-bar" style="height: 50px; animation-delay: 0.4s;"></div>
+                        <div class="wave-bar" style="height: 35px; animation-delay: 0.5s;"></div>
+                        <div class="wave-bar" style="height: 40px; animation-delay: 0.6s;"></div>
+                        <div class="wave-bar" style="height: 20px; animation-delay: 0.7s;"></div>
+                        <div class="wave-bar" style="height: 55px; animation-delay: 0.8s;"></div>
+                        <div class="wave-bar" style="height: 30px; animation-delay: 0.9s;"></div>
+                        <div class="wave-bar" style="height: 45px; animation-delay: 1s;"></div>
+                        <div class="wave-bar" style="height: 25px; animation-delay: 1.1s;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="evidence-tag">
+                <div class="tag-content">
+                    <strong>Listener Report #47 (Name Redacted):</strong><br>
+                    "I heard my sister's voice. She's been dead for 6 years. She was calling for help. 
+                    The static cleared and I heard her say my name three times. Then she said 
+                    'They're keeping us here. In the signal. We can't get out.' I threw my radio in the trash. 
+                    But I can still hear it sometimes, late at night, coming from the walls."
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 50px 0;">
+                <div class="evidence-photo" style="--rotation: 4deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center;">
+                            📻<br>
+                            [EVIDENCE PHOTO]<br>
+                            Radio Station WKNX<br>
+                            <span style="font-size: 0.8rem; color: #888;">Before demolition</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 2A - Broadcast Origin</div>
+                </div>
+
+                <div class="evidence-photo" style="--rotation: -5deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center;">
+                            📊<br>
+                            [EVIDENCE PHOTO]<br>
+                            Frequency Analysis<br>
+                            <span style="font-size: 0.8rem; color: #888;">Anomalous patterns detected</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 2B - Signal Pattern</div>
+                </div>
+
+                <div class="evidence-photo" style="--rotation: 1deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center;">
+                            🏚️<br>
+                            [EVIDENCE PHOTO]<br>
+                            Demolished Site<br>
+                            <span style="font-size: 0.8rem; color: #888;">Signal persists</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 2C - Current Status</div>
+                </div>
+            </div>
+
+            <div class="evidence-map">
+                <div style="text-align: center; padding-top: 30px; font-family: 'Special Elite', monospace; color: #999;">
+                    LISTENER REPORTS MAP - FLORIDA 1993-2024
+                </div>
+                <div class="map-pin" style="top: 40%; left: 35%;">
+                    <div class="pin-label">Miami - 47 reports</div>
+                </div>
+                <div class="map-pin" style="top: 25%; left: 50%;">
+                    <div class="pin-label">Jacksonville - 89 reports</div>
+                </div>
+                <div class="map-pin" style="top: 60%; left: 25%;">
+                    <div class="pin-label">Tampa - 62 reports</div>
+                </div>
+                <div class="map-pin" style="top: 45%; left: 70%;">
+                    <div class="pin-label">Orlando - 134 reports</div>
+                </div>
+                <div class="map-pin" style="top: 70%; left: 55%;">
+                    <div class="pin-label">Fort Myers - 38 reports</div>
+                </div>
+            </div>
+
+            <div class="case-description" style="margin-top: 50px; font-style: italic; color: #4a4a4a;">
+                <strong>Status:</strong> ONGOING<br>
+                <strong>Current Developments:</strong> As of 2024, over 2,000 individuals have reported 
+                hearing the transmission. The FCC has officially stated the signal "does not exist" despite 
+                documented evidence. Several telecommunications engineers who investigated the phenomenon 
+                have requested transfers to other departments, citing "personal reasons."
+            </div>
+        </div>
+    </div>
+
+    <!-- CASE #3 -->
+    <div class="case-folder" id="case3">
+        <div class="folder-tab">
+            <span>CASE FILE #003</span>
+        </div>
+        <div class="folder-content">
+            <div class="case-number">File No. 2001-OR-234</div>
+            <h2 class="case-title class="glitch">THE STAIRCASE IN THE FOREST</h2>
+            
+            <div class="case-description">
+                Park rangers across the United States have reported finding staircases in remote forest 
+                locations - pristine, well-maintained staircases that lead nowhere. No foundation, no 
+                structure, just stairs. Rangers are instructed never to climb them. Those who have 
+                violated this rule have experienced <span class="redacted">severe psychological trauma</span> 
+                or vanished entirely.
+            </div>
+
+            <div style="text-align: center; margin: 50px 0;">
+                <div class="evidence-photo" style="--rotation: -2deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center;">
+                            🪜<br>
+                            [EVIDENCE PHOTO]<br>
+                            Staircase #14<br>
+                            <span style="font-size: 0.8rem; color: #888;">Oregon - Discovery Date Unknown</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 3A - Anomalous Structure</div>
+                </div>
+
+                <div class="evidence-photo" style="--rotation: 3deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center;">
+                            🪜<br>
+                            [EVIDENCE PHOTO]<br>
+                            Staircase #27<br>
+                            <span style="font-size: 0.8rem; color: #888;">Washington - Material analysis: inconclusive</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 3B - Similar Discovery</div>
+                </div>
+            </div>
+
+            <div class="connection-board">
+                <div style="text-align: center; padding: 20px; font-family: 'Special Elite', monospace; color: #8b0000; font-size: 1.5rem;">
+                    INVESTIGATION BOARD - CONNECTED INCIDENTS
+                </div>
+                
+                <div class="connection-node" style="top: 100px; left: 100px;">
+                    Missing Person:<br>Sarah Mitchell<br>Last seen: Base of Staircase #14
+                </div>
+                
+                <div class="connection-node" style="top: 100px; right: 100px;">
+                    Missing Person:<br>David Chen<br>Last seen: Climbing Staircase #27
+                </div>
+                
+                <div class="connection-node" style="top: 350px; left: 50%;">
+                    Ranger Report:<br>"Felt compelled to climb"<br>Experienced missing time
+                </div>
+                
+                <div class="connection-node" style="bottom: 100px; left: 150px;">
+                    Evidence:<br>Footprints end at top step<br>No sign of descent
+                </div>
+                
+                <div class="connection-node" style="bottom: 100px; right: 150px;">
+                    Witness Account:<br>"Saw someone at top"<br>Person disappeared
+                </div>
+
+                <div class="red-string" style="top: 120px; left: 175px; width: 500px; transform: rotate(5deg);"></div>
+                <div class="red-string" style="top: 140px; left: 175px; width: 250px; transform: rotate(35deg);"></div>
+                <div class="red-string" style="top: 370px; left: 300px; width: 200px; transform: rotate(-45deg);"></div>
+                <div class="red-string" style="top: 370px; right: 300px; width: 200px; transform: rotate(45deg);"></div>
+            </div>
+
+            <div class="reveal-section">
+                <div class="sealed-envelope">
+                    <div class="envelope-back">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-family: 'Special Elite', monospace; color: #fff; font-size: 1.3rem;">
+                            📧 CLASSIFIED CORRESPONDENCE<br>
+                            <span style="font-size: 0.9rem; color: #ccc;">Hover to open</span>
+                        </div>
+                        <div class="envelope-content">
+                            <strong>INTERNAL MEMO - DO NOT DISTRIBUTE</strong><br><br>
+                            To: All Park Service Directors<br>
+                            From: Department Head [REDACTED]<br>
+                            Re: Protocol Update - "Staircases"<br><br>
+                            
+                            Effective immediately, all personnel are forbidden from approaching within 50 feet 
+                            of any unexplained staircase structures. Previous protocol of "observation only" 
+                            has proven insufficient.<br><br>
+                            
+                            Incident Report #89 details Ranger Thompson's encounter. Despite explicit warnings, 
+                            Thompson climbed to the third step. He reports experiencing "decades" of time passage 
+                            in what observers confirm was 4 minutes. Thompson has been placed on indefinite leave 
+                            and is receiving psychiatric care.<br><br>
+                            
+                            More concerning: Thompson claims he saw others at the top of the stairs. People who 
+                            have been missing for years. They were watching him. When he tried to descend, 
+                            he states they "tried to pull him up."<br><br>
+                            
+                            We do not know what these structures are or why they appear. Until further notice, 
+                            their locations are to be removed from all public maps and marked as hazardous terrain.
+                        </div>
+                    </div>
+                    <div class="envelope-flap"></div>
+                </div>
+            </div>
+
+            <div class="case-description" style="margin-top: 50px; font-style: italic; color: #4a4a4a;">
+                <strong>Total Documented Staircases:</strong> 67 (that we know of)<br>
+                <strong>Missing Persons Connected:</strong> 23<br>
+                <strong>Successful Explanations:</strong> 0
+            </div>
+        </div>
+    </div>
+
+    <!-- CASE #4 -->
+    <div class="case-folder" id="case4">
+        <div class="folder-tab">
+            <span>CASE FILE #004</span>
+        </div>
+        <div class="folder-content">
+            <div class="case-number">File No. 2008-MA-156</div>
+            <h2 class="case-title">THE SMILING FAMILY</h2>
+            
+            <div class="case-description">
+                In 2008, the Whitmore family of six was found in their Massachusetts home, all seated 
+                at the dinner table. They had been deceased for approximately three weeks. What disturbed 
+                investigators wasn't the tragedy itself, but the fact that all six family members, including 
+                the children, were found <span class="redacted">smiling</span>. The coroner reported this was 
+                not rigor mortis - their facial muscles had been deliberately positioned.
+            </div>
+
+            <div class="evidence-tag">
+                <div class="tag-content">
+                    <strong>Detective Morrison's Notes:</strong><br>
+                    "I've worked homicide for 20 years. I've never seen anything like this. The scene was 
+                    arranged like a normal family dinner - plates set, food still on the table (long spoiled). 
+                    But every single one of them was smiling. Not a natural smile. Too wide. The children's 
+                    faces especially... it haunts me. There was no sign of struggle. No forced entry. The doors 
+                    were locked from the inside. Toxicology came back clean. We found a camera set on a timer. 
+                    It took photos every hour for three weeks. In every single photo, they're sitting there. 
+                    Smiling. We can't explain how. They should have shown signs of decomposition, of movement, 
+                    something. But in every photo - just sitting there, smiling at the camera."
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 50px 0;">
+                <div class="evidence-photo" style="--rotation: 2deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center; padding: 20px;">
+                            🏠<br>
+                            [EVIDENCE PHOTO]<br>
+                            Whitmore Residence<br>
+                            <span style="font-size: 0.8rem; color: #888;">Exterior - Day of discovery</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 4A - Crime Scene</div>
+                </div>
+
+                <div class="evidence-photo" style="--rotation: -4deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image" style="background: #1a1a1a; border: 3px solid #8b0000;">
+                        <div style="text-align: center; color: #ff0000;">
+                            ⚠️<br>
+                            [PHOTO REDACTED]<br>
+                            Interior - Dining Room<br>
+                            <span style="font-size: 0.8rem;">RESTRICTED ACCESS</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 4B - [CLASSIFIED]</div>
+                </div>
+            </div>
+
+            <div class="newspaper">
+                <div class="newspaper-header">
+                    <div class="newspaper-title">Massachusetts Tribune</div>
+                    <div class="newspaper-date">October 12, 2008</div>
+                </div>
+                <div class="newspaper-headline">
+                    TRAGEDY STRIKES LOCAL FAMILY
+                </div>
+                <div class="newspaper-article">
+                    The Whitmore family, longtime residents of suburban Massachusetts, were found deceased 
+                    in their home yesterday evening after neighbors reported not seeing them for several weeks. 
+                    Police are investigating the incident as a possible murder-suicide, though details remain 
+                    scarce. "This is a terrible tragedy for our community," stated Police Chief Roberts. 
+                    "The Whitmores were well-loved members of our town." The family consisted of parents 
+                    Robert and Jennifer Whitmore, along with their four children, ages 6 to 14. Neighbors 
+                    described them as a "normal, happy family" who kept to themselves. The last confirmed 
+                    sighting of any family member was three weeks prior, when Jennifer was seen purchasing 
+                    groceries. Authorities are asking anyone with information to come forward. A memorial 
+                    service will be held at St. Mary's Church this Saturday.
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-event left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">September 18, 2008</div>
+                        <div class="timeline-description">
+                            Last confirmed sighting of family. Neighbors report seeing them unloading groceries. 
+                            Everything appeared normal.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-event right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">September 19-October 9, 2008</div>
+                        <div class="timeline-description">
+                            Three-week period with no contact. Mail accumulates. Phone calls go unanswered. 
+                            Camera timer continues to photograph the scene.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-event left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">October 10, 2008</div>
+                        <div class="timeline-description">
+                            Police perform wellness check after concerned neighbor reports. Discovery made. 
+                            Scene immediately secured.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-event right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">October 15, 2008</div>
+                        <div class="timeline-description">
+                            Case officially closed as "unexplained deaths." Federal agents confiscate all 
+                            photographic evidence. Investigation details sealed for 50 years.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="case-description" style="margin-top: 50px; font-style: italic; color: #4a4a4a;">
+                <strong>Official Cause of Death:</strong> Undetermined<br>
+                <strong>Disturbing Detail:</strong> Analysis of the timer photos shows that in the final week, 
+                the family members' eyes began to open between shots. By the last photo, all of them appear 
+                to be staring directly at the camera.<br>
+                <strong>Case Status:</strong> SEALED
+            </div>
+        </div>
+    </div>
+
+    <!-- CASE #5 -->
+    <div class="case-folder" id="case5">
+        <div class="folder-tab">
+            <span>CASE FILE #005</span>
+        </div>
+        <div class="folder-content">
+            <div class="case-number">File No. 2015-AK-923</div>
+            <h2 class="case-title">THE TOWN THAT REMEMBERS TOMORROW</h2>
+            
+            <div class="case-description">
+                The small town of Coldbrook, Alaska (population: 847) has been experiencing an impossible 
+                phenomenon since 2015. Residents report having detailed memories of events that haven't 
+                happened yet. These "future memories" are consistent across multiple witnesses and have 
+                been verified on <span class="redacted">47 separate occasions</span>. The implications 
+                are terrifying: they remember tomorrow, but they can't change it.
+            </div>
+
+            <div class="evidence-tag">
+                <div class="tag-content">
+                    <strong>Witness Statement - Mayor Patricia Hendricks:</strong><br>
+                    "It started small. People knowing who would call before the phone rang. Remembering 
+                    conversations that hadn't happened yet. Then it got worse. Three days before the 
+                    Johnsons' house burned down, half the town already 'remembered' it happening. 
+                    We tried to warn them. We tried to prevent it. But it happened exactly as we remembered. 
+                    The fire started at 11:47 PM, just like we knew it would. Now we're trapped, living 
+                    each day knowing what comes next, powerless to stop it. Last week, I remembered my 
+                    own funeral. It's scheduled for next month."
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 50px 0;">
+                <div class="evidence-photo" style="--rotation: -3deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center;">
+                            🏔️<br>
+                            [EVIDENCE PHOTO]<br>
+                            Coldbrook, Alaska<br>
+                            <span style="font-size: 0.8rem; color: #888;">Population: 847... for now</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 5A - Affected Area</div>
+                </div>
+
+                <div class="evidence-photo" style="--rotation: 5deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center; padding: 20px;">
+                            📋<br>
+                            [EVIDENCE DOCUMENT]<br>
+                            Verified Predictions<br>
+                            <span style="font-size: 0.8rem; color: #888;">100% Accuracy Rate</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 5B - Documentation</div>
+                </div>
+
+                <div class="evidence-photo" style="--rotation: -1deg;">
+                    <div class="tape"></div>
+                    <div class="photo-image">
+                        <div style="text-align: center; padding: 20px;">
+                            ⚠️<br>
+                            [TOWN NOTICE]<br>
+                            "Mandatory Evacuation"<br>
+                            <span style="font-size: 0.8rem; color: #888;">Date: Two weeks from now</span>
+                        </div>
+                    </div>
+                    <div class="photo-caption">Photo 5C - Future Event</div>
+                </div>
+            </div>
+
+            <div class="reveal-section">
+                <div class="sealed-envelope">
+                    <div class="envelope-back">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-family: 'Special Elite', monospace; color: #fff; font-size: 1.3rem;">
+                            📧 URGENT MESSAGE FROM COLDBROOK<br>
+                            <span style="font-size: 0.9rem; color: #ccc;">Hover to read</span>
+                        </div>
+                        <div class="envelope-content">
+                            <div class="typewriter" id="typewriter1">
+                                To whoever finds this message:<br><br>
+                                
+                                My name is Dr. Sarah Chen. I'm a physicist who came to Coldbrook to study 
+                                this phenomenon. That was six months ago. Now I'm trapped like everyone else.<br><br>
+                                
+                                We don't just remember tomorrow. We remember next week, next month. The memories 
+                                get hazier the further out they go, but they're always accurate. I've tried to 
+                                understand it. I've run every test I can think of. The only conclusion that makes 
+                                sense is impossible: time is flowing backwards here. Or maybe it's flowing both ways.<br><br>
+                                
+                                But that's not the worst part. The worst part is what we're starting to remember 
+                                about the end. All of us. The same memory. Something is coming to Coldbrook. 
+                                Something that shouldn't exist. And in two weeks, everyone here will be gone.<br><br>
+                                
+                                We've tried to leave. Cars break down at the town limits. Helicopters can't land. 
+                                It's like the future won't let us escape.<br><br>
+                                
+                                If you're reading this, it means I was right about one thing: someone will find 
+                                this message after we're gone. I just wish I could remember who.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="envelope-flap"></div>
+                </div>
+            </div>
+
+            <div class="newspaper" style="margin-top: 80px;">
+                <div class="newspaper-header">
+                    <div class="newspaper-title">Anchorage Daily News</div>
+                    <div class="newspaper-date">April 3, 2015</div>
+                </div>
+                <div class="newspaper-headline">
+                    BIZARRE REPORTS FROM REMOTE ALASKA TOWN
+                </div>
+                <div class="newspaper-article">
+                    Authorities are investigating strange reports coming from the remote town of Coldbrook, 
+                    Alaska. Multiple residents have contacted state officials claiming to have "precognitive 
+                    abilities." While such claims are typically dismissed, the consistency of the reports and 
+                    the number of witnesses involved has prompted a formal investigation. "We're taking this 
+                    seriously," stated State Trooper Williams. "These are rational people who are genuinely 
+                    disturbed by what they're experiencing." The town has requested assistance from federal 
+                    agencies, but as of press time, no official response has been issued. Coldbrook, located 
+                    approximately 200 miles north of Anchorage, has a population of 847 residents and is only 
+                    accessible by plane or a seasonal ice road during winter months.
+                </div>
+            </div>
+
+            <div class="case-description" style="margin-top: 50px; font-style: italic; color: #4a4a4a;">
+                <strong>Current Status:</strong> ACTIVE INVESTIGATION<br>
+                <strong>Last Communication from Coldbrook:</strong> March 28, 2024<br>
+                <strong>Scheduled Site Visit:</strong> April 15, 2024<br>
+                <strong>Disturbing Note:</strong> Residents of Coldbrook have all reported the same "memory" 
+                of our investigation team's arrival. They claim we will find the town empty. 
+                They remember us searching every building and finding no trace of the 847 residents. 
+                They remember us finding this case file, with this exact sentence written in it.<br><br>
+                <span style="color: #8b0000;">UPDATE: Investigation team departed for Coldbrook on April 14, 2024. 
+                No communication received for 48 hours. Search and rescue dispatched.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conclusion -->
+    <section class="conclusion">
+        <div class="final-statement">
+            <h2>CASE FILES: CONCLUDED</h2>
+            <p>
+                You have now reviewed five of the most disturbing cases in our archives. 
+                Cases that official agencies claim don't exist. Stories that should never be told.
+            </p>
+            <p>
+                The cabin that exists outside of time.<br>
+                The broadcast that continues from a demolished building.<br>
+                The staircases that lead to nowhere—or everywhere.<br>
+                The family that smiled for three weeks.<br>
+                The town that remembers its own end.
+            </p>
+            <p style="color: #ff0000; font-size: 1.6rem; margin-top: 40px;">
+                These files are marked as FICTION for legal purposes.<br>
+                But every investigation folder carries the same handwritten note:<br>
+                <span style="font-family: 'Special Elite', monospace;">"The truth is stranger than any story."</span>
+            </p>
+            <p style="margin-top: 40px; font-size: 1.2rem; color: #999;">
+                Sleep well tonight...<br>
+                If you can.
+            </p>
+        </div>
+    </section>
+
+    <script>
+        // ========== CURSOR SYSTEM ==========
+        const flashlightCursor = document.getElementById('flashlightCursor');
+        const flashlightBeam = document.getElementById('flashlightBeam');
+        const darkness = document.getElementById('darkness');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            flashlightCursor.style.left = mouseX + 'px';
+            flashlightCursor.style.top = mouseY + 'px';
+            
+            flashlightBeam.style.left = mouseX + 'px';
+            flashlightBeam.style.top = mouseY + 'px';
+            
+            darkness.style.setProperty('--mouse-x', mouseX + 'px');
+            darkness.style.setProperty('--mouse-y', mouseY + 'px');
+        });
+
+        // ========== WARNING SCREEN ==========
+        const warningScreen = document.getElementById('warningScreen');
+        const enterButton = document.getElementById('enterButton');
+
+        enterButton.addEventListener('click', () => {
+            warningScreen.classList.add('hidden');
+        });
+
+        // ========== STATIC EFFECT ==========
+        const tvStatic = document.getElementById('tvStatic');
+
+        function triggerStatic() {
+            tvStatic.classList.add('active');
+            setTimeout(() => {
+                tvStatic.classList.remove('active');
+            }, 200);
+        }
+
+        // Random static
+        setInterval(() => {
+            if (Math.random() > 0.9) {
+                triggerStatic();
+            }
+        }, 5000);
+
+        // ========== SCROLL ANIMATIONS ==========
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.case-folder').forEach(folder => {
+            folder.style.opacity = '0';
+            folder.style.transform = 'translateY(50px)';
+            folder.style.transition = 'all 1s ease';
+            observer.observe(folder);
+        });
+
+        // ========== AUDIO PLAYER INTERACTION ==========
+        const playButtons = document.querySelectorAll('.play-button');
+        
+        playButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                triggerStatic();
+                alert('🔊 In the full version, you would hear: Static... breathing... faint whispers of names... then silence.');
+            });
+        });
+
+        // ========== PHOTO HOVER EFFECTS ==========
+        const photos = document.querySelectorAll('.evidence-photo');
+        
+        photos.forEach(photo => {
+            photo.addEventListener('mouseenter', () => {
+                if (Math.random() > 0.7) {
+                    triggerStatic();
+                }
+            });
+        });
+
+        // ========== TYPEWRITER EFFECT ==========
+        const typewriterElements = document.querySelectorAll('.typewriter');
+        
+        typewriterElements.forEach(element => {
+            const text = element.textContent;
+            element.textContent = '';
+            element.style.display = 'none';
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        element.style.display = 'block';
+                        let index = 0;
+                        
+                        const typeInterval = setInterval(() => {
+                            if (index < text.length) {
+                                element.textContent += text.charAt(index);
+                                index++;
+                            } else {
+                                clearInterval(typeInterval);
+                            }
+                        }, 30);
+                        
+                        revealObserver.unobserve(element);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            revealObserver.observe(element);
+        });
+
+        // ========== REDACTED TEXT INTERACTION ==========
+        const redactedElements = document.querySelectorAll('.redacted');
+        
+        redactedElements.forEach(element => {
+            element.addEventListener('click', () => {
+                if (Math.random() > 0.8) {
+                    element.style.background = 'transparent';
+                    element.style.color = '#8b0000';
+                    setTimeout(() => {
+                        element.style.background = '#000';
+                        element.style.color = 'transparent';
+                    }, 2000);
+                }
+            });
+        });
+
+        // ========== GLITCH EFFECT ON SCROLL ==========
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            
+            if (Math.abs(currentScroll - lastScroll) > 500) {
+                if (Math.random() > 0.85) {
+                    triggerStatic();
+                }
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // ========== EASTER EGG: KONAMI CODE ==========
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+
+            if (konamiCode.join(',') === konamiSequence.join(',')) {
+                activateEasterEgg();
+            }
+        });
+
+        function activateEasterEgg() {
+            alert('📁 CLASSIFIED FILE UNLOCKED\n\nCASE #000 - "THE ARCHIVE ITSELF"\n\nThose who investigate the strange, dark, and mysterious often become part of it. You\'ve been reading these files for ' + Math.floor(Math.random() * 30 + 10) + ' minutes. But check your clock. How much time has actually passed?');
+            
+            // Glitch effect
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    triggerStatic();
+                }, i * 200);
+            }
+        }
+
+        // ========== AMBIENT EFFECTS ==========
+        setInterval(() => {
+            const glitchElements = document.querySelectorAll('.glitch');
+            glitchElements.forEach(el => {
+                if (Math.random() > 0.95) {
+                    el.style.animation = 'none';
+                    setTimeout(() => {
+                        el.style.animation = 'glitch 5s infinite';
+                    }, 10);
+                }
+            });
+        }, 3000);
+
+        // ========== CONSOLE EASTER EGG ==========
+        console.log('%c⚠ CLASSIFIED DOCUMENTS ⚠', 'font-size: 30px; color: #8b0000; text-shadow: 0 0 10px #8b0000; font-weight: bold;');
+        console.log('%cYou are viewing restricted case files.', 'font-size: 16px; color: #ff0000;');
+        console.log('%cThese stories are marked as FICTION.', 'font-size: 14px; color: #999;');
+        console.log('%cBut are they?', 'font-size: 14px; color: #666;');
+        console.log('%cTry the Konami Code: ↑ ↑ ↓ ↓ ← → ← → B A', 'font-size: 12px; color: #444;');
+
+        // ========== FINAL TOUCH: TIME DISTORTION ==========
+        const startTime = Date.now();
+        
+        window.addEventListener('beforeunload', () => {
+            const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+            console.log(`%cYou spent ${timeSpent} seconds reading these files.`, 'font-size: 14px; color: #8b0000;');
+            console.log('%cOr did you?', 'font-size: 14px; color: #666;');
+        });
+    </script>
+</body>
+</html>
